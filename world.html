@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
+<title>BastAI World</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;font-family:Arial,sans-serif}
+body{background:#315b3b;color:#fff}#world{height:100%;position:relative;overflow:hidden}
+.sky{position:absolute;inset:0 0 37%;background:linear-gradient(#74c5ea,#d8f1ef);transition:1s}
+.sun{position:absolute;width:95px;height:95px;right:12%;top:11%;border-radius:50%;background:#ffe79b;box-shadow:0 0 50px #ffe79b}
+.cloud{position:absolute;width:170px;height:42px;border-radius:40px;background:#ffffffaa;left:-220px;animation:cloud 38s linear infinite}
+.cloud:before,.cloud:after{content:"";position:absolute;background:inherit;border-radius:50%}.cloud:before{width:70px;height:70px;left:28px;top:-30px}.cloud:after{width:82px;height:82px;right:18px;top:-40px}
+.c1{top:15%;animation-delay:0s}.c2{top:15%;animation-delay:12s}.c3{top:15%;animation-delay:24s}
+.butterfly{position:absolute;font-size:20px;animation:fly1 8s ease-in-out infinite}
+.bf1{left:10%;top:18%;animation-duration:9s}.bf2{left:30%;top:12%;animation-duration:7s;animation-delay:2s}.bf3{left:55%;top:20%;animation-duration:10s;animation-delay:4s}.bf4{left:75%;top:14%;animation-duration:8s;animation-delay:1s}
+@keyframes fly1{0%{transform:translate(0,0) rotate(0deg)}25%{transform:translate(40px,-30px) rotate(10deg)}50%{transform:translate(80px,10px) rotate(-5deg)}75%{transform:translate(30px,-20px) rotate(8deg)}100%{transform:translate(0,0) rotate(0deg)}}
+.mountain{position:absolute;bottom:0;width:0;height:0;border-left:27vw solid transparent;border-right:27vw solid transparent;border-bottom:28vh solid #75967e}.m1{left:-7vw}.m2{right:-10vw;border-bottom-color:#537665}
+header{position:absolute;z-index:10;top:22px;left:25px;right:25px;display:flex;justify-content:space-between}.logo{font-size:28px;font-weight:800}
+.welcome{position:absolute;z-index:5;top:38%;width:100%;text-align:center;text-shadow:0 3px 15px #18321e}.welcome h1{margin:0 12px;font-size:clamp(27px,4vw,54px)}.welcome p{margin:9px 0;font-size:18px}.play-btn{display:inline-block;margin-top:25px;padding:16px 50px;border-radius:50px;background:linear-gradient(135deg,#4CAF50,#2E7D32);color:#fff;text-decoration:none;font-size:22px;font-weight:700;box-shadow:0 6px 25px #0005;transition:all .3s}.play-btn:hover{transform:scale(1.08);box-shadow:0 8px 35px #0007}
+.ground{position:absolute;inset:63% 0 0;background:linear-gradient(#6ba55b,#315b3a);overflow:hidden}
+.path{position:absolute;width:38%;height:130%;left:31%;top:-55%;background:#9a855f;border-radius:50%;transform:rotate(7deg);opacity:.7}
+.tree{position:absolute;bottom:0;width:40px;height:145px;background:#65442d;border-radius:10px 10px 0 0;transform-origin:bottom;animation:sway 4s ease-in-out infinite}
+.tree:before{content:"";position:absolute;width:110px;height:105px;left:-35px;top:-75px;background:#2c653e;border-radius:50%;box-shadow:35px -22px 0 #367447,-20px -18px 0 #3a7848}
+.t1{left:7%}.t2{left:75%;height:125px}.t3{left:89%;height:170px}
+#character{position:absolute;bottom:13%;left:9%;width:42px;height:112px;animation:walk 14s ease-in-out infinite alternate}
+.head{position:absolute;left:7px;width:29px;height:29px;border-radius:50%;background:#c98d68}.body{position:absolute;top:28px;width:38px;height:52px;border-radius:13px;background:#293f77}
+.leg{position:absolute;top:76px;width:8px;height:36px;border-radius:8px;background:#222}.leg.l{left:8px}.leg.r{right:8px}
+#butterfly{position:absolute;left:24%;top:17%;font-size:22px;animation:fly 10s ease-in-out infinite alternate}
+.controls{position:absolute;z-index:20;right:22px;bottom:20px;display:flex;gap:9px}
+button{border:1px solid #ffffff55;background:#15251de8;color:#fff;padding:11px 15px;border-radius:12px;cursor:pointer;font-size:15px}
+#volumeSlider{-webkit-appearance:none;appearance:none;width:80px;height:6px;background:rgba(255,255,255,.2);border-radius:3px;outline:none;cursor:pointer}
+#volumeSlider::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:16px;height:16px;background:#fff;border-radius:50%;box-shadow:0 0 6px rgba(0,0,0,.3)}
+#volumeSlider::-moz-range-thumb{width:16px;height:16px;background:#fff;border-radius:50%;box-shadow:0 0 6px rgba(0,0,0,.3);border:none}
+#settingsPanel{position:absolute;z-index:30;right:22px;bottom:72px;width:300px;padding:20px;border-radius:16px;background:linear-gradient(135deg,rgba(15,25,40,.95),rgba(10,18,32,.98));backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(100,200,255,.2);box-shadow:0 8px 32px rgba(0,0,0,.4);display:none;max-height:70vh;overflow-y:auto}
+#settingsPanel.open{display:block}
+#settingsPanel h2{margin:0 0 15px;font-size:18px;font-family:'Poppins',sans-serif;color:#64c8ff;border-bottom:1px solid rgba(100,200,255,.2);padding-bottom:10px}
+.setting{display:flex;justify-content:space-between;align-items:center;margin:12px 0;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.05)}
+.setting span{font-size:13px;font-family:'Poppins',sans-serif;color:rgba(255,255,255,.85)}
+.setting select,.setting input[type="range"]{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#fff;padding:6px 10px;border-radius:8px;font-size:12px;cursor:pointer}
+.setting select{min-width:100px}
+.setting input[type="range"]{width:100px;height:6px;-webkit-appearance:none;appearance:none}
+.setting input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;background:#64c8ff;border-radius:50%;cursor:pointer}
+.setting input[type="checkbox"]{width:40px;height:20px;-webkit-appearance:none;appearance:none;background:rgba(255,255,255,.2);border-radius:10px;position:relative;cursor:pointer;transition:.3s}
+.setting input[type="checkbox"]::before{content:'';position:absolute;width:16px;height:16px;background:#fff;border-radius:50%;top:2px;left:2px;transition:.3s}
+.setting input[type="checkbox"]:checked{background:#64c8ff}
+.setting input[type="checkbox"]:checked::before{left:22px}
+.close{width:100%;margin-top:15px;background:linear-gradient(135deg,#64c8ff,#3a7848);border:none;color:#fff;padding:10px;border-radius:10px;font-weight:600;cursor:pointer;transition:.3s}
+.close:hover{transform:scale(1.02);box-shadow:0 4px 15px rgba(100,200,255,.3)}
+#realtime-clock{position:absolute;z-index:25;top:15px;right:15px;padding:10px 16px;background:linear-gradient(135deg,rgba(15,25,40,.7),rgba(10,18,32,.85));backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(100,200,255,.2);border-radius:12px;text-align:right;box-shadow:0 0 20px rgba(100,200,255,.1),inset 0 0 20px rgba(100,200,255,.05)}
+#realtime-clock .time{font-family:'Orbitron',monospace;font-size:20px;font-weight:700;letter-spacing:3px;color:#fff;text-shadow:0 0 10px rgba(100,200,255,.8),0 0 30px rgba(100,200,255,.4)}
+#realtime-clock .date{font-family:'Poppins',sans-serif;font-size:9px;font-weight:500;color:rgba(200,230,255,.7);margin-top:3px;letter-spacing:2px;text-transform:uppercase}
+#realtime-clock .seconds{display:inline-block;font-family:'Orbitron',monospace;font-size:11px;color:#64c8ff;margin-top:2px;padding:2px 8px;background:rgba(100,200,255,.1);border-radius:4px;border:1px solid rgba(100,200,255,.2)}
+@keyframes cloud{to{transform:translateX(130vw)}}@keyframes sway{50%{transform:rotate(2deg)}}@keyframes walk{to{left:80%}}
+@media(max-width:600px){header{top:14px;left:15px;right:15px}.welcome{top:39%}.welcome h1{font-size:28px}.controls{right:12px;bottom:12px}#realtime-clock{top:10px;right:10px;padding:10px 16px}#realtime-clock .time{font-size:22px}}
+</style>
+</head>
+<body>
+<div id="world">
+<div id="realtime-clock"><div class="time" id="rtime"></div><div class="seconds" id="rsec"></div><div class="date" id="rdate"></div></div>
+<div class="sky"><i class="sun"></i><i class="cloud c1"></i><i class="cloud c2"></i><i class="cloud c3"></i><i class="mountain m1"></i><i class="mountain m2"></i></div>
+<header><div class="logo">BastAI</div></header>
+<section class="welcome"><h1>Selamat Datang di BastAI World</h1><p>Tuan Arul</p><a href="menu.html" class="play-btn">▶ Start</a></section>
+<div class="ground"><div class="path"></div><i class="tree t1"></i><i class="tree t2"></i><i class="tree t3"></i><div id="character"><i class="head"></i><i class="body"></i><i class="leg l"></i><i class="leg r"></i></div><span class="butterfly bf1">🦋</span><span class="butterfly bf2">🦋</span><span class="butterfly bf3">🦋</span><span class="butterfly bf4">🦋</span></div>
+<div class="controls"><button id="volume" onclick="toggleMute()">🔊</button><input type="range" id="volumeSlider" min="0" max="1" step="0.1" value="0.5" oninput="setVolume(this.value)"><button id="settings">⚙ Settings</button></div>
+<audio id="bgMusic" loop preload="auto"><source src="Merry Christmas, i miss you - Alex Crichton _ Lirik Terjemahan Indonesia [izEkQ7ZFUoA].mp3" type="audio/mpeg"></audio>
+<aside id="settingsPanel">
+<h2>⚙ Settings</h2>
+<div class="setting"><span>🌙 Mode Gelap</span><input type="checkbox" id="darkMode"></div>
+<div class="setting"><span>🔤 Ukuran Font</span><select id="fontSize"><option value="12">Kecil</option><option value="16" selected>Sedang</option><option value="20">Besar</option></select></div>
+<div class="setting"><span>🎨 Suasana</span><select id="scene"><option>Siang</option><option>Senja</option><option>Malam</option></select></div>
+<div class="setting"><span>✨ Animasi</span><select id="animSpeed"><option value="paused">Mati</option><option value="slow">Lambat</option><option value="normal" selected>Normal</option><option value="fast">Cepat</option></select></div>
+<div class="setting"><span>🎵 Volume Musik</span><input type="range" id="musicVolume" min="0" max="1" step="0.1" value="0.5"></div>
+<div class="setting"><span>🦋 Efek Kupu-kupu</span><input type="checkbox" id="butterflyToggle" checked></div>
+<div class="setting"><span>☁️ Awan</span><input type="checkbox" id="cloudToggle" checked></div>
+<div class="setting"><span>🌳 Pohon</span><input type="checkbox" id="treeToggle" checked></div>
+<button class="close" id="close">Tutup</button>
+</aside>
+<script>
+function realtimeClock(){
+  const now=new Date();
+  const h=String(now.getHours()).padStart(2,'0');
+  const m=String(now.getMinutes()).padStart(2,'0');
+  const s=String(now.getSeconds()).padStart(2,'0');
+  document.getElementById('rtime').textContent=h+':'+m;
+  document.getElementById('rsec').textContent=': '+s;
+  const days=['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+  const months=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+  document.getElementById('rdate').textContent=days[now.getDay()]+', '+now.getDate()+' '+months[now.getMonth()]+' '+now.getFullYear();
+}
+realtimeClock();setInterval(realtimeClock,1000);
+
+const bgMusic=document.getElementById('bgMusic');
+bgMusic.volume=0.5;
+bgMusic.play().catch(()=>{document.addEventListener('click',()=>bgMusic.play(),{once:true})});
+
+function toggleMute(){bgMusic.muted=!bgMusic.muted;document.getElementById('volume').textContent=bgMusic.muted?'🔇':'🔊'}
+function setVolume(v){bgMusic.volume=v;bgMusic.muted=v==0;document.getElementById('volume').textContent=v==0?'🔇':'🔊'}
+
+document.getElementById('settings').onclick=()=>document.getElementById('settingsPanel').classList.toggle('open');
+document.getElementById('close').onclick=()=>document.getElementById('settingsPanel').classList.remove('open');
+
+document.getElementById('darkMode').onchange=e=>{
+  document.body.style.background=e.target.checked?'#0a0a1a':'#315b3b';
+  document.querySelector('.sky').style.opacity=e.target.checked?'0.3':'1';
+  document.querySelector('.ground').style.opacity=e.target.checked?'0.4':'1';
+};
+
+document.getElementById('fontSize').onchange=e=>{
+  document.querySelectorAll('.welcome h1,.welcome p,.play-btn,.logo').forEach(el=>{el.style.fontSize=e.target.value+'px'});
+};
+
+document.getElementById('scene').onchange=e=>{
+  let s=document.querySelector('.sky');
+  s.style.background=e.target.value==='Malam'?'linear-gradient(#0b1730,#263b5c)':e.target.value==='Senja'?'linear-gradient(#ed9b72,#76596b)':'linear-gradient(#74c5ea,#d8f1ef)';
+};
+
+document.getElementById('animSpeed').onchange=e=>{
+  const val=e.target.value;
+  if(val==='paused'){document.querySelectorAll('*').forEach(x=>x.style.animationPlayState='paused')}
+  else{document.querySelectorAll('*').forEach(x=>{x.style.animationPlayState='running';x.style.animationDuration=val==='slow'?'20s':val==='fast'?'2s':''})}
+};
+
+document.getElementById('musicVolume').oninput=e=>{setVolume(e.target.value)};
+
+document.getElementById('butterflyToggle').onchange=e=>{document.querySelectorAll('.butterfly').forEach(b=>{b.style.display=e.target.checked?'block':'none'})};
+
+document.getElementById('cloudToggle').onchange=e=>{document.querySelectorAll('.cloud').forEach(c=>{c.style.display=e.target.checked?'block':'none'})};
+
+document.getElementById('treeToggle').onchange=e=>{document.querySelectorAll('.tree').forEach(t=>{t.style.display=e.target.checked?'block':'none'})};
+</script>
+</div>
+</body>
+</html>
