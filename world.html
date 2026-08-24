@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BastAI World</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;font-family:Arial,sans-serif}
+body{background:#315b3b;color:#fff}#world{height:100%;position:relative;overflow:hidden}
+.sky{position:absolute;inset:0 0 37%;background:linear-gradient(#74c5ea,#d8f1ef);transition:1s}
+.sun{position:absolute;width:95px;height:95px;right:12%;top:11%;border-radius:50%;background:#ffe79b;box-shadow:0 0 50px #ffe79b}
+.cloud{position:absolute;width:170px;height:42px;border-radius:40px;background:#ffffffaa;left:-220px;top:20%;animation:cloud 38s linear infinite}
+.cloud:before,.cloud:after{content:"";position:absolute;background:inherit;border-radius:50%}.cloud:before{width:70px;height:70px;left:28px;top:-30px}.cloud:after{width:82px;height:82px;right:18px;top:-40px}
+.mountain{position:absolute;bottom:0;width:0;height:0;border-left:27vw solid transparent;border-right:27vw solid transparent;border-bottom:28vh solid #75967e}.m1{left:-7vw}.m2{right:-10vw;border-bottom-color:#537665}
+header{position:absolute;z-index:10;top:22px;left:25px;right:25px;display:flex;justify-content:space-between}.logo{font-size:28px;font-weight:800}.clock{text-align:right;font-weight:700}.clock small{font-weight:400;opacity:.85}
+.welcome{position:absolute;z-index:5;top:38%;width:100%;text-align:center;text-shadow:0 3px 15px #18321e}.welcome h1{margin:0 12px;font-size:clamp(27px,4vw,54px)}.welcome p{margin:9px 0;font-size:18px}
+.ground{position:absolute;inset:63% 0 0;background:linear-gradient(#6ba55b,#315b3a);overflow:hidden}
+.path{position:absolute;width:38%;height:130%;left:31%;top:-55%;background:#9a855f;border-radius:50%;transform:rotate(7deg);opacity:.7}
+.tree{position:absolute;bottom:0;width:40px;height:145px;background:#65442d;border-radius:10px 10px 0 0;transform-origin:bottom;animation:sway 4s ease-in-out infinite}
+.tree:before{content:"";position:absolute;width:110px;height:105px;left:-35px;top:-75px;background:#2c653e;border-radius:50%;box-shadow:35px -22px 0 #367447,-20px -18px 0 #3a7848}
+.t1{left:7%}.t2{left:75%;height:125px}.t3{left:89%;height:170px}
+#character{position:absolute;bottom:13%;left:9%;width:42px;height:112px;animation:walk 14s ease-in-out infinite alternate}
+.head{position:absolute;left:7px;width:29px;height:29px;border-radius:50%;background:#c98d68}.body{position:absolute;top:28px;width:38px;height:52px;border-radius:13px;background:#293f77}
+.leg{position:absolute;top:76px;width:8px;height:36px;border-radius:8px;background:#222}.leg.l{left:8px}.leg.r{right:8px}
+#butterfly{position:absolute;left:24%;top:17%;font-size:22px;animation:fly 10s ease-in-out infinite alternate}
+.controls{position:absolute;z-index:20;right:22px;bottom:20px;display:flex;gap:9px}
+button{border:1px solid #ffffff55;background:#15251de8;color:#fff;padding:11px 15px;border-radius:12px;cursor:pointer;font-size:15px}
+#settingsPanel{position:absolute;z-index:30;right:22px;bottom:72px;width:270px;padding:18px;border-radius:16px;background:#13231cf5;display:none}
+#settingsPanel.open{display:block}.setting{display:flex;justify-content:space-between;align-items:center;margin:15px 0}.close{width:100%}
+@keyframes cloud{to{transform:translateX(130vw)}}@keyframes sway{50%{transform:rotate(2deg)}}@keyframes walk{to{left:80%}}@keyframes fly{to{transform:translate(90px,-40px)}}
+@media(max-width:600px){header{top:14px;left:15px;right:15px}.welcome{top:39%}.welcome h1{font-size:28px}.controls{right:12px;bottom:12px}}
+</style>
+</head>
+<body>
+<div id="world">
+<div class="sky"><i class="sun"></i><i class="cloud"></i><i class="cloud" style="top:32%;animation-duration:52s"></i><i class="mountain m1"></i><i class="mountain m2"></i></div>
+<header><div class="logo">BastAI</div><div class="clock" id="clock"></div></header>
+<section class="welcome"><h1>Selamat Datang di BastAI World</h1><p>Tuan Arul</p></section>
+<div class="ground"><div class="path"></div><i class="tree t1"></i><i class="tree t2"></i><i class="tree t3"></i><div id="character"><i class="head"></i><i class="body"></i><i class="leg l"></i><i class="leg r"></i></div><span id="butterfly">🦋</span></div>
+<div class="controls"><button id="volume">🔊 Volume</button><button id="settings">⚙ Settings</button></div>
+<aside id="settingsPanel"><h2>Settings</h2><div class="setting"><span>Suasana</span><select id="scene"><option>Siang</option><option>Senja</option><option>Malam</option></select></div><div class="setting"><span>Gerakan</span><input id="motion" type="checkbox" checked></div><button class="close" id="close">Tutup</button></aside>
+<script>
+function clock(){let d=new Date();document.getElementById('clock').innerHTML=d.toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'})+'<br><small>'+d.toLocaleDateString('id-ID',{weekday:'long',day:'numeric',month:'long',year:'numeric'})+'</small>}clock();setInterval(clock,1000);
+document.getElementById('settings').onclick=()=>document.getElementById('settingsPanel').classList.toggle('open');
+document.getElementById('close').onclick=()=>document.getElementById('settingsPanel').classList.remove('open');
+document.getElementById('volume').onclick=()=>document.getElementById('volume').textContent=document.getElementById('volume').textContent.includes('🔊')?'🔇 Volume':'🔊 Volume';
+document.getElementById('motion').onchange=e=>document.querySelectorAll('*').forEach(x=>x.style.animationPlayState=e.target.checked?'running':'paused');
+document.getElementById('scene').onchange=e=>{let s=document.querySelector('.sky');s.style.background=e.target.value==='Malam'?'linear-gradient(#0b1730,#263b5c)':e.target.value==='Senja'?'linear-gradient(#ed9b72,#76596b)':'linear-gradient(#74c5ea,#d8f1ef)'};
+</script>
+</div>
+</body>
+</html>
